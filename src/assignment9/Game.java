@@ -5,19 +5,45 @@ import java.awt.event.KeyEvent;
 import edu.princeton.cs.introcs.StdDraw;
 
 public class Game {
-	
+	private Snake snake;
+    private Food food;
+  
+    
 	public Game() {
 		StdDraw.enableDoubleBuffering();
-		
+		snake = new Snake();
+	    food = new Food();
 		//FIXME - construct new Snake and Food objects
 	}
 	
 	public void play() {
-		while (true) { //TODO: Update this condition to check if snake is in bounds
-			int dir = getKeypress();
-			//Testing only: you will eventually need to do more work here
-			System.out.println("Keypress: " + dir);
+		StdDraw.clear();
+	    StdDraw.text(0.5, 0.7, "SNAKE GAME");
+	    StdDraw.text(0.5, 0.5, "Press WASD to start");
+	    StdDraw.show();
+
+	    // Wait for a key press to start the game
+	    while (!StdDraw.hasNextKeyTyped()) {
+	        // Wait for a key press
+	    }
+
+	    
+		while (snake.isInbounds()) { //TODO: Update this condition to check if snake is in bounds
+			int dir = getKeypress(); //obtains user input
 			
+			 if (dir != -1) {// if direction isn't -1
+	                snake.changeDirection(dir);// change direction
+	            }
+
+	            snake.move();// updates the position of the snake based on the current direction
+	            if (snake.eatFood(food)) { // if snake eats the food
+	           
+	                food = new Food(); // Generate new food after being eaten
+	            }
+	            updateDrawing(); //updates screen
+	            StdDraw.pause(50);
+	           
+	            StdDraw.show(); // shows screen
 			/*
 			 * 1. Pass direction to your snake
 			 * 2. Tell the snake to move
@@ -25,6 +51,11 @@ public class Game {
 			 * 4. Update the drawing
 			 */
 		}
+		StdDraw.clear();
+		//String s=Integer.toString(score);
+		StdDraw.text(0.5, 0.5, "Game Over!");
+		System.out.println("Game Over!");
+		StdDraw.show();
 	}
 	
 	private int getKeypress() {
@@ -46,7 +77,9 @@ public class Game {
 	 */
 	private void updateDrawing() {
 		//FIXME
-		
+		StdDraw.clear();
+        snake.draw();
+        food.draw();
 		/*
 		 * 1. Clear screen
 		 * 2. Draw snake and food
